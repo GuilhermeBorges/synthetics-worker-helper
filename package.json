@@ -59,7 +59,7 @@
     {
       "name": "create-worker-branch",
       "title": "Create Worker Branch from JIRA",
-      "subtitle": "Synthetics Worker",
+      "subtitle": "Synthetics Execution Helper",
       "description": "Create a branch from a JIRA ticket in the worker repo",
       "icon": "command-icon.png",
       "mode": "view"
@@ -67,7 +67,7 @@
     {
       "name": "open-gitlab-pipelines",
       "title": "Open GitLab Pipelines",
-      "subtitle": "Synthetics Worker",
+      "subtitle": "Synthetics Execution Helper",
       "description": "Open GitLab pipelines (optionally filtered by a local git branch)",
       "icon": "gitlab-icon.png",
       "mode": "view"
@@ -75,7 +75,7 @@
     {
       "name": "open-preferences",
       "title": "Open Extension Preferences",
-      "subtitle": "Synthetics Worker Helper",
+      "subtitle": "Synthetics Execution Helper",
       "description": "Open this extension's preferences",
       "icon": "command-icon.png",
       "mode": "no-view"
