@@ -31,6 +31,28 @@
       "defaultValue": "guilherme.oliveira",
       "title": "Git Username",
       "description": "Used to build the branch name (e.g. username/SYNTH-1234/description)."
+    },
+    {
+      "name": "jiraEmail",
+      "type": "textfield",
+      "required": false,
+      "title": "Jira Email",
+      "description": "Optional (auto-fill only). Your Atlassian account email (used with the API token for Basic Auth)."
+    },
+    {
+      "name": "jiraApiToken",
+      "type": "password",
+      "required": false,
+      "title": "Jira API Token",
+      "description": "Optional (auto-fill only). Create one at: https://id.atlassian.com/manage-profile/security/api-tokens"
+    },
+    {
+      "name": "jiraDefaultProjectKey",
+      "type": "textfield",
+      "required": false,
+      "defaultValue": "SYNTH",
+      "title": "Default Jira Project Key",
+      "description": "Used when you type only a number (e.g. 23559 -> SYNTH-23559)."
     }
   ],
   "commands": [
@@ -41,6 +63,14 @@
       "description": "Create a branch from a JIRA ticket in the worker repo",
       "icon": "command-icon.png",
       "mode": "view"
+    },
+    {
+      "name": "open-preferences",
+      "title": "Open Extension Preferences",
+      "subtitle": "Synthetics Worker Helper",
+      "description": "Open this extension's preferences",
+      "icon": "command-icon.png",
+      "mode": "no-view"
     }
   ],
   "dependencies": {
