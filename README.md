@@ -1,0 +1,1 @@
+# Synthetics Worker Helper
