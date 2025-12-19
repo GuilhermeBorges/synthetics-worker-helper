@@ -40,6 +40,14 @@
       "description": "Zoom link opened by the Daily command (the same URL shown in the calendar invite)."
     },
     {
+      "name": "jiraBoardUrl",
+      "type": "textfield",
+      "required": false,
+      "defaultValue": "https://datadoghq.atlassian.net/jira/software/c/projects/SYNTH/boards/3245",
+      "title": "Jira Board URL",
+      "description": "Jira board link opened by the Jira Board command."
+    },
+    {
       "name": "jiraEmail",
       "type": "textfield",
       "required": false,
@@ -92,6 +100,14 @@
       "title": "Daily",
       "subtitle": "Synthetics Execution Helper",
       "description": "Open the daily Zoom link",
+      "icon": "command-icon.png",
+      "mode": "no-view"
+    },
+    {
+      "name": "jira-board",
+      "title": "Jira Board",
+      "subtitle": "Synthetics Execution Helper",
+      "description": "Open the Jira board",
       "icon": "command-icon.png",
       "mode": "no-view"
     }

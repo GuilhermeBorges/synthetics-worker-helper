@@ -34,6 +34,8 @@ In Raycast: **Settings** → **Extensions** → **Synthetics Worker Helper**:
 
 - **Worker Directory (`workerDir`)**: path to the `synthetics-worker` directory where git commands should run
 - **Git Username (`gitUsername`)**: used to build branch names (e.g. `username/SYNTH-1234/description`)
+- **Daily Zoom URL (`dailyZoomUrl`)**: Zoom link opened by the Daily command (use the same URL shown in the calendar invite)
+- **Jira Board URL (`jiraBoardUrl`)**: Jira board link opened by the Jira Board command (optional; defaults to the SYNTH board)
 - **Jira Email (`jiraEmail`)** (optional, auto-fill only): your Atlassian account email
 - **Jira API Token (`jiraApiToken`)** (optional, auto-fill only): create one at `https://id.atlassian.com/manage-profile/security/api-tokens`
 - **Default Jira Project Key (`jiraDefaultProjectKey`)**: used when typing only the issue number (e.g. `23559` → `SYNTH-23559`)
@@ -50,5 +52,7 @@ In Raycast: **Settings** → **Extensions** → **Synthetics Worker Helper**:
   - If you don't want to pick a branch, select **Open GitLab (no branch filter)** to open pipelines unfiltered.
 
 - **Daily**: opens the daily Zoom link (configured via the **Daily Zoom URL** preference — use the same URL shown in the calendar invite).
+
+- **Jira Board**: opens the Jira board (configured via the **Jira Board URL** preference).
 
 Example Jira ticket: `https://datadoghq.atlassian.net/browse/SYNTH-23559`
