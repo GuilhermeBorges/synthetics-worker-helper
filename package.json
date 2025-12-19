@@ -65,6 +65,14 @@
       "mode": "view"
     },
     {
+      "name": "open-gitlab-pipelines",
+      "title": "Open GitLab Pipelines",
+      "subtitle": "Synthetics Worker",
+      "description": "Open GitLab pipelines (optionally filtered by a local git branch)",
+      "icon": "gitlab-icon.png",
+      "mode": "view"
+    },
+    {
       "name": "open-preferences",
       "title": "Open Extension Preferences",
       "subtitle": "Synthetics Worker Helper",

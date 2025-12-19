@@ -45,4 +45,8 @@ In Raycast: **Settings** → **Extensions** → **Synthetics Worker Helper**:
   - If Jira Email + API Token are configured, the command will **auto-fill the Description** using the Jira issue summary.
   - The **Jira URL field is optional** and is only used to auto-detect the issue key.
 
+- **Open GitLab Pipelines**: opens GitLab pipelines for `DataDog/synthetics-worker`
+  - Choose a **local git branch** to open pipelines filtered by `ref=<branch>`.
+  - If you don't want to pick a branch, select **Open GitLab (no branch filter)** to open pipelines unfiltered.
+
 Example Jira ticket: `https://datadoghq.atlassian.net/browse/SYNTH-23559`
