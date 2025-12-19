@@ -39,6 +39,7 @@
       "title": "Create Worker Branch from JIRA",
       "subtitle": "Synthetics Worker",
       "description": "Create a branch from a JIRA ticket in the worker repo",
+      "icon": "command-icon.png",
       "mode": "view"
     }
   ],
