@@ -2,6 +2,8 @@ import {
     Action,
     ActionPanel,
     Form,
+    getPreferenceValues,
+    openExtensionPreferences,
     popToRoot,
     showHUD,
     showToast,
@@ -14,9 +16,6 @@ import {
   const asyncExec = util.promisify(exec);
   
   const JIRA_PREFIX = "SYNTH-";
-
-  const WORKER_DIR =
-    "/Users/guilherme.oliveira/go/src/github.com/DataDog/synthetics-worker/packages/synthetics/worker";
   
   type BaseBranch = "prod" | "current";
   
@@ -48,11 +47,17 @@ import {
       .replace(/^-+|-+$/g, ""); // trim leading/trailing -
   }
   
-  async function createBranch({ jiraId, description, baseBranch }: FormValues) {
+  async function createBranch({
+    jiraId,
+    description,
+    baseBranch,
+    workerDir,
+    gitUsername,
+  }: FormValues & { workerDir: string; gitUsername: string }) {
     const sanitizedDesc = sanitizeDescription(description);
-    const branchName = `guilherme.oliveira/${jiraId}/${sanitizedDesc}`;
+    const branchName = `${gitUsername}/${jiraId}/${sanitizedDesc}`;
   
-    const opts = { cwd: WORKER_DIR };
+    const opts = { cwd: workerDir };
   
     if (baseBranch === "prod") {
       await asyncExec("git checkout prod", opts);
@@ -68,9 +73,24 @@ import {
     const [jiraIdInput, setJiraIdInput] = useState<string>(JIRA_PREFIX);
 
     async function handleSubmit(values: Form.Values) {
+      const { workerDir, gitUsername } = getPreferenceValues<{ workerDir: string; gitUsername: string }>();
+
       const jiraId = normalizeJiraId(String(values.jiraId || ""));
       const description = String(values.description || "").trim();
       const baseBranch = (values.baseBranch as BaseBranch) || "prod";
+
+      const normalizedWorkerDir = String(workerDir || "").trim();
+      const normalizedGitUsername = String(gitUsername || "").trim().replace(/\s+/g, "");
+
+      if (!normalizedWorkerDir || !normalizedGitUsername) {
+        await showToast({
+          style: Toast.Style.Failure,
+          title: "Missing Preferences",
+          message: "Set Worker Directory and Git Username in extension preferences.",
+        });
+        await openExtensionPreferences();
+        return;
+      }
   
       if (jiraId === JIRA_PREFIX) {
         await showToast({
@@ -103,7 +123,13 @@ import {
           title: "Creating branch…",
         });
   
-        const branchName = await createBranch({ jiraId, description, baseBranch });
+        const branchName = await createBranch({
+          jiraId,
+          description,
+          baseBranch,
+          workerDir: normalizedWorkerDir,
+          gitUsername: normalizedGitUsername,
+        });
   
         await showHUD(`✅ Created branch: ${branchName}`);
         await popToRoot();

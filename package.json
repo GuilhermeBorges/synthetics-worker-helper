@@ -15,6 +15,24 @@
     "Productivity"
   ],
   "license": "MIT",
+  "preferences": [
+    {
+      "name": "workerDir",
+      "type": "directory",
+      "required": true,
+      "defaultValue": "/Users/guilherme.oliveira/go/src/github.com/DataDog/synthetics-worker/packages/synthetics/worker",
+      "title": "Worker Directory",
+      "description": "Path to the synthetics-worker directory where git commands should run."
+    },
+    {
+      "name": "gitUsername",
+      "type": "textfield",
+      "required": true,
+      "defaultValue": "guilherme.oliveira",
+      "title": "Git Username",
+      "description": "Used to build the branch name (e.g. username/SYNTH-1234/description)."
+    }
+  ],
   "commands": [
     {
       "name": "create-worker-branch",
