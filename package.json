@@ -33,6 +33,13 @@
       "description": "Used to build the branch name (e.g. username/SYNTH-1234/description)."
     },
     {
+      "name": "dailyZoomUrl",
+      "type": "textfield",
+      "required": true,
+      "title": "Daily Zoom URL",
+      "description": "Zoom link opened by the Daily command (the same URL shown in the calendar invite)."
+    },
+    {
       "name": "jiraEmail",
       "type": "textfield",
       "required": false,
@@ -77,6 +84,14 @@
       "title": "Open Extension Preferences",
       "subtitle": "Synthetics Execution Helper",
       "description": "Open this extension's preferences",
+      "icon": "command-icon.png",
+      "mode": "no-view"
+    },
+    {
+      "name": "daily",
+      "title": "Daily",
+      "subtitle": "Synthetics Execution Helper",
+      "description": "Open the daily Zoom link",
       "icon": "command-icon.png",
       "mode": "no-view"
     }

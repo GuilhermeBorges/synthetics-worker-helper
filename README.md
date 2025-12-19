@@ -49,4 +49,6 @@ In Raycast: **Settings** → **Extensions** → **Synthetics Worker Helper**:
   - Choose a **local git branch** to open pipelines filtered by `ref=<branch>`.
   - If you don't want to pick a branch, select **Open GitLab (no branch filter)** to open pipelines unfiltered.
 
+- **Daily**: opens the daily Zoom link (configured via the **Daily Zoom URL** preference — use the same URL shown in the calendar invite).
+
 Example Jira ticket: `https://datadoghq.atlassian.net/browse/SYNTH-23559`
