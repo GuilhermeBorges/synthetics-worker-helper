@@ -7,11 +7,14 @@ import {
     showToast,
     Toast,
   } from "@raycast/api";
+  import { useState } from "react";
   import { exec } from "child_process";
   import util from "util";
   
   const asyncExec = util.promisify(exec);
   
+  const JIRA_PREFIX = "SYNTH-";
+
   const WORKER_DIR =
     "/Users/guilherme.oliveira/go/src/github.com/DataDog/synthetics-worker/packages/synthetics/worker";
   
@@ -23,6 +26,21 @@ import {
     baseBranch: BaseBranch;
   }
   
+  function normalizeJiraId(input: string): string {
+    const trimmed = String(input || "").trim();
+    if (!trimmed) return JIRA_PREFIX;
+
+    // Accept: "1234", "SYNTH-1234", "synth1234", "SYNTH1234", "SYNTH-"
+    let rest = trimmed;
+    const prefixRe = /^synth-?/i;
+    if (prefixRe.test(rest)) rest = rest.replace(prefixRe, "");
+
+    rest = rest.replace(/^\s*-?\s*/g, ""); // remove leading '-' and spaces
+    rest = rest.replace(/\s+/g, ""); // remove inner spaces
+
+    return `${JIRA_PREFIX}${rest}`;
+  }
+
   function sanitizeDescription(description: string): string {
     return description
       .toLowerCase()
@@ -47,12 +65,14 @@ import {
   }
   
   export default function Command() {
+    const [jiraIdInput, setJiraIdInput] = useState<string>(JIRA_PREFIX);
+
     async function handleSubmit(values: Form.Values) {
-      const jiraId = String(values.jiraId || "").trim();
+      const jiraId = normalizeJiraId(String(values.jiraId || ""));
       const description = String(values.description || "").trim();
       const baseBranch = (values.baseBranch as BaseBranch) || "prod";
   
-      if (!jiraId) {
+      if (jiraId === JIRA_PREFIX) {
         await showToast({
           style: Toast.Style.Failure,
           title: "JIRA ID is required",
@@ -60,6 +80,15 @@ import {
         return;
       }
   
+      if (!/^SYNTH-\d+$/i.test(jiraId)) {
+        await showToast({
+          style: Toast.Style.Failure,
+          title: "Invalid JIRA ID",
+          message: 'Use the format "SYNTH-1234"',
+        });
+        return;
+      }
+
       if (!description) {
         await showToast({
           style: Toast.Style.Failure,
@@ -78,11 +107,17 @@ import {
   
         await showHUD(`✅ Created branch: ${branchName}`);
         await popToRoot();
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : typeof error === "object" && error && "stderr" in error
+              ? String((error as { stderr?: unknown }).stderr)
+              : String(error);
         await showToast({
           style: Toast.Style.Failure,
           title: "Failed to create branch",
-          message: error?.stderr || error?.message || String(error),
+          message,
         });
       }
     }
@@ -95,7 +130,13 @@ import {
           </ActionPanel>
         }
       >
-        <Form.TextField id="jiraId" title="JIRA ID" placeholder="SYNTH-1234" />
+        <Form.TextField
+          id="jiraId"
+          title="JIRA ID"
+          value={jiraIdInput}
+          onChange={(v) => setJiraIdInput(normalizeJiraId(v))}
+          placeholder="1234"
+        />
         <Form.TextField
           id="description"
           title="Description"
