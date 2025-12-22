@@ -18,7 +18,7 @@ import {
   const DEFAULT_JIRA_BASE_URL = "https://datadoghq.atlassian.net";
   const DEFAULT_JIRA_PROJECT_KEY = "SYNTH";
   
-  type BaseBranch = "prod" | "current";
+  type BaseBranch = "prod" | "current" | "waiting-thaw";
   
   type JiraPreferences = {
     workerDir: string;
@@ -98,8 +98,8 @@ import {
   
     const opts = { cwd: workerDir };
   
-    if (baseBranch === "prod") {
-      await asyncExec("git checkout prod", opts);
+    if (baseBranch === "prod" || baseBranch === "waiting-thaw") {
+      await asyncExec(`git checkout ${baseBranch}`, opts);
       await asyncExec("git pull", opts);
     }
   
@@ -337,6 +337,7 @@ import {
         />
         <Form.Dropdown id="baseBranch" title="🌿 Base Branch" defaultValue="prod" info="Branch to base from when creating a new branch.">
           <Form.Dropdown.Item value="prod" title="prod" />
+          <Form.Dropdown.Item value="waiting-thaw" title="waiting-thaw" />
           <Form.Dropdown.Item value="current" title="current (stay on current branch)" />
         </Form.Dropdown>
       </Form>
