@@ -213,6 +213,54 @@ export default function Command() {
             </ActionPanel>
           }
         />
+
+        <List.Item
+          id="pipelines-prod"
+          title="Pipelines for prod"
+          subtitle="prod"
+          icon={Icon.Star}
+          actions={
+            <ActionPanel>
+              <Action.OpenInBrowser
+                title="Open Pipelines for Prod"
+                url={pipelinesUrlForBranch("prod")}
+                onOpen={() => void showHUD("Opening pipelines for prod…")}
+              />
+              <Action.CopyToClipboard title="Copy URL" content={pipelinesUrlForBranch("prod")} />
+              <Action
+                title="Reload Branches"
+                icon={Icon.ArrowClockwise}
+                shortcut={{ modifiers: ["cmd"], key: "r" }}
+                onAction={reload}
+              />
+              <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openExtensionPreferences} />
+            </ActionPanel>
+          }
+        />
+
+        <List.Item
+          id="pipelines-staging"
+          title="Pipelines for staging"
+          subtitle="staging"
+          icon={Icon.Star}
+          actions={
+            <ActionPanel>
+              <Action.OpenInBrowser
+                title="Open Pipelines for Staging"
+                url={pipelinesUrlForBranch("staging")}
+                onOpen={() => void showHUD("Opening pipelines for staging…")}
+              />
+              <Action.CopyToClipboard title="Copy URL" content={pipelinesUrlForBranch("staging")} />
+              <Action
+                title="Reload Branches"
+                icon={Icon.ArrowClockwise}
+                shortcut={{ modifiers: ["cmd"], key: "r" }}
+                onAction={reload}
+              />
+              <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openExtensionPreferences} />
+            </ActionPanel>
+          }
+        />
       </List.Section>
 
       <List.Section
