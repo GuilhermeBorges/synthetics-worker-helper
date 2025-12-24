@@ -9,7 +9,7 @@ import {
   showToast,
   Toast,
 } from "@raycast/api";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { exec } from "child_process";
 import util from "util";
 
@@ -99,6 +99,8 @@ export default function Command() {
   const [currentRef, setCurrentRef] = useState<string>("");
   const [branches, setBranches] = useState<BranchInfo[]>([]);
   const [error, setError] = useState<string>("");
+  const [selectedItemId, setSelectedItemId] = useState<string>("open-gitlab");
+  const ignoreNextSelectionEventRef = useRef<boolean>(false);
 
   async function reload() {
     setIsLoading(true);
@@ -127,6 +129,20 @@ export default function Command() {
     void reload();
   }, [workerDir]);
 
+  useEffect(() => {
+    // Raycast keeps selection when new items appear; once we load currentRef, default to it
+    // unless the user already moved selection away from the default ("open-gitlab").
+    if (currentRef) {
+      if (selectedItemId === "open-gitlab") {
+        ignoreNextSelectionEventRef.current = true;
+        setSelectedItemId("current-branch");
+      }
+    } else if (selectedItemId === "current-branch") {
+      ignoreNextSelectionEventRef.current = true;
+      setSelectedItemId("open-gitlab");
+    }
+  }, [currentRef, selectedItemId]);
+
   const sortedBranches = useMemo(() => {
     const current = branches.filter((b) => b.isCurrent);
     const rest = branches.filter((b) => !b.isCurrent);
@@ -139,10 +155,20 @@ export default function Command() {
       searchBarPlaceholder="Search branch…"
       navigationTitle="GitLab Pipelines — Synthetics Worker"
       isShowingDetail={false}
+      selectedItemId={selectedItemId}
+      onSelectionChange={(id) => {
+        if (!id) return;
+        if (ignoreNextSelectionEventRef.current) {
+          ignoreNextSelectionEventRef.current = false;
+          return;
+        }
+        setSelectedItemId(id);
+      }}
     >
       <List.Section title="Quick Open">
         {currentRef ? (
           <List.Item
+            id="current-branch"
             title="Pipelines for Current Branch"
             subtitle={currentRef}
             icon={Icon.Star}
@@ -166,6 +192,7 @@ export default function Command() {
         ) : null}
 
         <List.Item
+          id="open-gitlab"
           title="Open GitLab (no branch filter)"
           subtitle="Pipelines (all branches)"
           icon={Icon.Globe}
@@ -208,6 +235,7 @@ export default function Command() {
 
           return (
             <List.Item
+              id={`branch:${b.branch}`}
               key={b.branch}
               title={title}
               subtitle={subtitle}
