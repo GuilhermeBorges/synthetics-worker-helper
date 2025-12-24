@@ -100,7 +100,9 @@ export default function Command() {
   const [branches, setBranches] = useState<BranchInfo[]>([]);
   const [error, setError] = useState<string>("");
   const [selectedItemId, setSelectedItemId] = useState<string>("open-gitlab");
-  const ignoreNextSelectionEventRef = useRef<boolean>(false);
+  const userInteractedRef = useRef<boolean>(false);
+  const autoSelectedRef = useRef<boolean>(false);
+  const autoSelectingRef = useRef<boolean>(false);
 
   async function reload() {
     setIsLoading(true);
@@ -130,17 +132,24 @@ export default function Command() {
   }, [workerDir]);
 
   useEffect(() => {
-    // Raycast keeps selection when new items appear; once we load currentRef, default to it
-    // unless the user already moved selection away from the default ("open-gitlab").
-    if (currentRef) {
-      if (selectedItemId === "open-gitlab") {
-        ignoreNextSelectionEventRef.current = true;
-        setSelectedItemId("current-branch");
-      }
-    } else if (selectedItemId === "current-branch") {
-      ignoreNextSelectionEventRef.current = true;
-      setSelectedItemId("open-gitlab");
+    // Raycast can keep selection when new items appear; we only want to auto-select once,
+    // and never "fight" the user when they navigate with the keyboard.
+    if (!currentRef) {
+      autoSelectedRef.current = false;
+      return;
     }
+    if (autoSelectedRef.current) return;
+    if (userInteractedRef.current) return;
+    // If the user already navigated somewhere else, don't override.
+    if (selectedItemId !== "open-gitlab") return;
+
+    autoSelectedRef.current = true;
+    autoSelectingRef.current = true;
+    setSelectedItemId("current-branch");
+    const t = setTimeout(() => {
+      autoSelectingRef.current = false;
+    }, 150);
+    return () => clearTimeout(t);
   }, [currentRef, selectedItemId]);
 
   const sortedBranches = useMemo(() => {
@@ -158,10 +167,11 @@ export default function Command() {
       selectedItemId={selectedItemId}
       onSelectionChange={(id) => {
         if (!id) return;
-        if (ignoreNextSelectionEventRef.current) {
-          ignoreNextSelectionEventRef.current = false;
-          return;
-        }
+        // Raycast sometimes emits selection events on mount/load; only treat it as user interaction
+        // if the selection actually changes and we're not in the middle of auto-selecting.
+        if (autoSelectingRef.current) return;
+        if (id === selectedItemId) return;
+        userInteractedRef.current = true;
         setSelectedItemId(id);
       }}
     >
