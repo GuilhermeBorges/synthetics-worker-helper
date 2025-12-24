@@ -88,6 +88,14 @@
       "mode": "view"
     },
     {
+      "name": "open-gitlab-current-branch",
+      "title": "Open GitLab Pipelines (Current Branch)",
+      "subtitle": "Synthetics Execution Helper",
+      "description": "Open GitLab pipelines filtered by the currently checked out branch",
+      "icon": "gitlab-icon.png",
+      "mode": "no-view"
+    },
+    {
       "name": "open-preferences",
       "title": "Open Extension Preferences",
       "subtitle": "Synthetics Execution Helper",
