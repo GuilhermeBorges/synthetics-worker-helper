@@ -141,28 +141,6 @@ export default function Command() {
       isShowingDetail={false}
     >
       <List.Section title="Quick Open">
-        <List.Item
-          title="Open GitLab (no branch filter)"
-          subtitle="Pipelines (all branches)"
-          icon={Icon.Globe}
-          actions={
-            <ActionPanel>
-              <Action.OpenInBrowser
-                title="Open GitLab (No Filter)"
-                url={GITLAB_PIPELINES_BASE_URL}
-                onOpen={() => void showHUD("Opening GitLab (no filter)…")}
-              />
-              <Action
-                title="Reload Branches"
-                icon={Icon.ArrowClockwise}
-                shortcut={{ modifiers: ["cmd"], key: "r" }}
-                onAction={reload}
-              />
-              <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openExtensionPreferences} />
-            </ActionPanel>
-          }
-        />
-
         {currentRef ? (
           <List.Item
             title="Pipelines for Current Branch"
@@ -186,6 +164,28 @@ export default function Command() {
             }
           />
         ) : null}
+
+        <List.Item
+          title="Open GitLab (no branch filter)"
+          subtitle="Pipelines (all branches)"
+          icon={Icon.Globe}
+          actions={
+            <ActionPanel>
+              <Action.OpenInBrowser
+                title="Open GitLab (No Filter)"
+                url={GITLAB_PIPELINES_BASE_URL}
+                onOpen={() => void showHUD("Opening GitLab (no filter)…")}
+              />
+              <Action
+                title="Reload Branches"
+                icon={Icon.ArrowClockwise}
+                shortcut={{ modifiers: ["cmd"], key: "r" }}
+                onAction={reload}
+              />
+              <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openExtensionPreferences} />
+            </ActionPanel>
+          }
+        />
       </List.Section>
 
       <List.Section
